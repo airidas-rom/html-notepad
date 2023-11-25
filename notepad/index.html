@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .note-section {
+      background-color: white;
+      border: 1px solid #ccc;
+      margin: 10px 0;
+      padding: 10px;
+      width: 100%;
+    }
+
+    textarea {
+      width: 100%;
+      resize: none;
+      padding: 10px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div id="note-container">
+    <button id="add-section-btn">+ Add Section</button>
+  </div>
+
+  <script>
+    const noteContainer = document.getElementById("note-container");
+    const addSectionBtn = document.getElementById("add-section-btn");
+
+    // Load sections from local storage
+    const sectionsJSON = localStorage.getItem("sections");
+    const sections = sectionsJSON ? JSON.parse(sectionsJSON) : [];
+    sections.forEach(sectionData => {
+      const section = document.createElement("div");
+      section.classList.add("note-section");
+
+      const textarea = document.createElement("textarea");
+      textarea.id = sectionData.id;
+      section.appendChild(textarea);
+
+      const removeBtn = document.createElement("button");
+      removeBtn.innerHTML = "Remove";
+      removeBtn.addEventListener("click", function() {
+        section.remove();
+
+        const sections = Array.from(
+          noteContainer.querySelectorAll(".note-section")
+        ).map(section => {
+          return {
+            id: section.firstChild.id,
+            value: section.firstChild.value
+          };
+        });
+        localStorage.setItem("sections", JSON.stringify(sections));
+      });
+      section.appendChild(removeBtn);
+
+      noteContainer.appendChild(section);
+
+      textarea.addEventListener("input", function() {
+        localStorage.setItem(this.id, this.value);
+
+        const sections = Array.from(
+          noteContainer.querySelectorAll(".note-section")
+        ).map(section => {
+          return {
+            id: section.firstChild.id,
+            value: section.firstChild.value
+          };
+        });
+        localStorage.setItem("sections", JSON.stringify(sections));
+
+        this.style.height = "";
+        this.style.height = this.scrollHeight + "px";
+      });
+
+      textarea.value = localStorage.getItem(textarea.id) || "";
+      textarea.style.height = textarea.scrollHeight + "px";
+    });
+
+    addSectionBtn.addEventListener("click", function() {
+      const section = document.createElement("div");
+      section.classList.add("note-section");
+
+      const textarea = document.createElement("textarea");
+      textarea.id = Date.now();
+      section.appendChild(textarea);
+
+      const removeBtn = document.createElement("button");
+      removeBtn.innerHTML = "Remove";
+      removeBtn.addEventListener("click", function() {
+        section.remove();
+
+        const sections = Array.from(
+          noteContainer.querySelectorAll(".note-section")
+        ).map(section => {
+          return {
+            id: section.firstChild.id,
+            value: section.firstChild.value
+          };
+        });
+        localStorage.setItem("sections", JSON.stringify(sections));
+      });
+      section.appendChild(removeBtn);
+
+      noteContainer.appendChild(section);
+
+      textarea.addEventListener("input", function() {
+        localStorage.setItem(this.id, this.value);
+
+        const sections = Array.from(
+          noteContainer.querySelectorAll(".note-section")
+        ).map(section => {
+          return {
+            id: section.firstChild.id,
+            value: section.firstChild.value
+          };
+        });
+        localStorage.setItem("sections", JSON.stringify(sections));
+
+        this.style.height = "";
+        this.style.height = this.scrollHeight + "px";
+      });
+
+      textarea.style.height = "30px";
+    });
+  </script>
+</body>
+</html>
+
